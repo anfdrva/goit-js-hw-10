@@ -8,7 +8,6 @@ const catInfo = document.querySelector('.cat-info');
 fetchBreeds()
   .then(data => {
     console.log(data);
-
     const option = data.map(
       ({ id, name }) => `<option value="${id}">${name}</option>`
     );
@@ -16,12 +15,12 @@ fetchBreeds()
     Loading.remove();
   })
   .catch(() => {
-    Report.failure();
+    Report.failure("Oops!", "Something went wrong! Try reloading the page!");
   });
 
 breedSelect.addEventListener('change', e => {
   e.preventDefault();
-  Loading.standard();
+  Loading.standard("Loading data, please wait...");
   const breedSelectId = breedSelect.value;
   fetchCatByBreed(breedSelectId)
     .then(cat => {
@@ -36,8 +35,7 @@ breedSelect.addEventListener('change', e => {
       catInfo.innerHTML = info;
     })
     .catch(() => {
-      Report.failure();
+      Report.failure("Oops!", "Something went wrong! Try reloading the page!");
     });
 });
-
 
