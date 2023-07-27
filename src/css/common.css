@@ -1,7 +1,13 @@
-p{
-    font-size: 55px;
+
+.cat-info{
+    display: flex;
+    gap: 15px;
+    flex-wrap: nowrap;
 }
 
 .breed-select{
-    background-color: blue;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 15px;
+    margin-bottom: 20px;
 }

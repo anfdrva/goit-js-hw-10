@@ -1,45 +1,43 @@
-import axios from "axios";
-import { fetchBreeds, fetchCatByBreed } from "./cat-api";
+import { fetchBreeds, fetchCatByBreed } from './cat-api';
+import { Report } from 'notiflix/build/notiflix-report-aio';
+import { Loading } from 'notiflix/build/notiflix-loading-aio';
 
-const selectCat = document.querySelector(".breed-select");
-const infoCat = document.querySelector(".cat-info");
-const loader = document.querySelector(".loader");
-const error = document.querySelector(".error");
-
-error.hidden = true;
+const breedSelect = document.querySelector('.breed-select');
+const catInfo = document.querySelector('.cat-info');
 
 fetchBreeds()
-    .then(data => {
-        selectCat.innerHTML = data.map(elem => `<option value="${elem.id}">${elem.name}</option>`).join("");
+  .then(data => {
+    console.log(data);
+
+    const option = data.map(
+      ({ id, name }) => `<option value="${id}">${name}</option>`
+    );
+    breedSelect.innerHTML = option;
+    Loading.remove();
+  })
+  .catch(() => {
+    Report.failure();
+  });
+
+breedSelect.addEventListener('change', e => {
+  e.preventDefault();
+  Loading.standard();
+  const breedSelectId = breedSelect.value;
+  fetchCatByBreed(breedSelectId)
+    .then(cat => {
+      Loading.remove();
+      const info = `
+		<div class='thumb-pic'><img src="${cat.url}" alt="${cat.id}" width=400></div>
+		<div class='thumb'>
+		<h2>${cat.breeds[0].name}</h2>
+		<p>${cat.breeds[0].description}</p>
+		<p><b>Temperament:</b> ${cat.breeds[0].temperament}</p>
+		</div>`;
+      catInfo.innerHTML = info;
     })
-    .catch(() => error.removeAttribute("hidden"))
-    .finally(() => loader.setAttribute("hidden", true))
+    .catch(() => {
+      Report.failure();
+    });
+});
 
-selectCat.addEventListener("change", heandlerChange);
 
-function heandlerChange(evt) {
-    infoCat.style.visibility = "hidden"
-    loader.removeAttribute("hidden")
-    fetchCatByBreed(evt.target.value)
-        .then(data => {
-            const img = data.map(elem => `<img src="${elem.url}" alt="cat" width="400" height="400">`).join("");
-            infoCat.innerHTML = img;
-            data.map(elem => {
-                elem.breeds.forEach(cat => {
-                    const array = [cat];
-                    const findCatById = array.find(option => option.id === `${evt.target.value}`);
-                    const markup = `<div class="cat-container">
-                    <h2>${findCatById.name}</h2>
-                    <p>${findCatById.description}</p>
-                    <h2>Temperament</h2>
-                    <p>${findCatById.temperament}</p>
-                    </div>`
-                    infoCat.insertAdjacentHTML("beforeend", markup)
-                    infoCat.style.visibility = "visible"
-                })
-            })
-        })
-       
-        .catch(() => {error.removeAttribute("hidden")})
-        .finally(() => loader.setAttribute("hidden", true));
-}

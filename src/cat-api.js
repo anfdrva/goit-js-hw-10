@@ -1,25 +1,35 @@
-const options = {
-    headers: {
-        'x-api-key': 'live_mSgF2dZzulwDyx0bMv0cLnJQWegZHuonqVCFywHZsYw1IrLHCVSB6P5cqU2Napge'
-    }
+import { Report } from 'notiflix/build/notiflix-report-aio';
+import axios from 'axios';
+axios.defaults.headers.common['x-api-key'] =
+  'live_mSgF2dZzulwDyx0bMv0cLnJQWegZHuonqVCFywHZsYw1IrLHCVSB6P5cqU2Napge';
+axios.defaults.baseURL = 'https://api.thecatapi.com/v1/';
+
+
+function fetchBreeds() {
+  return axios
+    .get(`breeds/`)
+    .then(response => {
+      if (response.status !== 200) {
+        throw new Error(response.status);
+      }
+      return response.data;
+    })
+    .catch(() => {
+      Report.failure();
+    });
 }
 
-export const fetchBreeds = function () {
-    return fetch("https://api.thecatapi.com/v1/breeds", options)
-        .then(resp => {
-            if (!resp.ok) {
-            throw new Error(resp.statusText)
-            }
-            return resp.json()
-        })
+function fetchCatByBreed(breedId) {
+  return axios
+    .get(`/images/search?breed_ids=${breedId}`)
+    .then(response => {
+      if (response.status !== 200) {
+        throw new Error(response.status);
+      }
+      return response.data[0];
+    })
+    .catch(() => {
+      Report.failure();
+    });
 }
-
-export const fetchCatByBreed = function (breedId) {
-    return fetch(`https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`, options)
-        .then(resp => {
-            if (!resp.ok) {
-            throw new Error(resp.statusText)
-            }
-            return resp.json()
-        })
-}
+export { fetchBreeds, fetchCatByBreed };
