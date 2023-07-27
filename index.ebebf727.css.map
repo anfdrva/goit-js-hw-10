@@ -1,1 +1,0 @@
-{"mappings":"ACAA,iBAIA","sources":["index.ebebf727.css","src/css/common.css"],"sourcesContent":["p {\n  font-size: 55px;\n}\n\n.breed-select {\n  background-color: #00f;\n}\n\n/*# sourceMappingURL=index.ebebf727.css.map */\n","p{\n    font-size: 55px;\n}\n\n.breed-select{\n    background-color: blue;\n}"],"names":[],"version":3,"file":"index.ebebf727.css.map"}
