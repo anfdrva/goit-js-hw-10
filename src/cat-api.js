@@ -11,7 +11,7 @@ export const fetchBreeds = function () {
             throw new Error(resp.statusText)
             }
             return resp.json()
-    })
+        })
 }
 
 export const fetchCatByBreed = function (breedId) {
@@ -21,5 +21,5 @@ export const fetchCatByBreed = function (breedId) {
             throw new Error(resp.statusText)
             }
             return resp.json()
-    })
+        })
 }
