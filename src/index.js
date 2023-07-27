@@ -5,9 +5,10 @@ import { Loading } from 'notiflix/build/notiflix-loading-aio';
 const breedSelect = document.querySelector('.breed-select');
 const catInfo = document.querySelector('.cat-info');
 
+Loading.standard("Loading data, please wait...");
+
 fetchBreeds()
-  .then(data => {
-    console.log(data);
+    .then(data => {
     const option = data.map(
       ({ id, name }) => `<option value="${id}">${name}</option>`
     );
@@ -15,7 +16,7 @@ fetchBreeds()
     Loading.remove();
   })
   .catch(() => {
-    Report.failure("Oops!", "Something went wrong! Try reloading the page!");
+      Report.failure("Oops!", "Something went wrong! Try reloading the page!");
   });
 
 breedSelect.addEventListener('change', e => {
@@ -32,10 +33,13 @@ breedSelect.addEventListener('change', e => {
 		<p>${cat.breeds[0].description}</p>
 		<p><b>Temperament:</b> ${cat.breeds[0].temperament}</p>
 		</div>`;
-      catInfo.innerHTML = info;
+        catInfo.innerHTML = '';
+        catInfo.innerHTML = info;
+
     })
-    .catch(() => {
-      Report.failure("Oops!", "Something went wrong! Try reloading the page!");
+      .catch(() => {
+          catInfo.innerHTML = '';
+        Report.failure("Oops!", "Something went wrong! Try reloading the page!");
     });
 });
 
