@@ -5,15 +5,18 @@ import { Loading } from 'notiflix/build/notiflix-loading-aio';
 const breedSelect = document.querySelector('.breed-select');
 const catInfo = document.querySelector('.cat-info');
 
+breedSelect.style.display = 'none';
 Loading.standard("Loading data, please wait...");
 
 fetchBreeds()
+    
     .then(data => {
     const option = data.map(
       ({ id, name }) => `<option value="${id}">${name}</option>`
     );
     breedSelect.innerHTML = option;
-    Loading.remove();
+        Loading.remove();
+        breedSelect.style.display = 'block';
   })
   .catch(() => {
       Report.failure("Oops!", "Something went wrong! Try reloading the page!");
